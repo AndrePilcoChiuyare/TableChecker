@@ -3,8 +3,12 @@ import pickle
 import numpy as np
 
 seat = []
-with open('espacios.pkl', 'rb') as file:
+with open('seats.pkl', 'rb') as file:
     seat = pickle.load(file)
+
+tables = []
+with open('tables.pkl', 'rb') as file:
+    tables = pickle.load(file)
 
 video = cv2.VideoCapture('prueba.mp4')
 occ = [1] * len(seat)
@@ -23,26 +27,28 @@ while True:
     imgDil = cv2.dilate(imgMedian, kernel)
     for x, y, w, h in seat:
         rec = (x, y, w, h)
-        cont = 0
-        for i in table:
-            zeros = 0
-            for j in i:
-                if occ[j] == 0:
-                    zeros += 1
-            if zeros == len(i): table_occ[cont] = 'Free'
-            else: table_occ[cont] = 'Full'
-            cont += 1
         espacio = imgDil[y:y+h, x:x+w]
         count = cv2.countNonZero(espacio)
         cv2.putText(img, str(seat.index(rec))+ ', ' + str(occ[seat.index(rec)]) + ', ' + str(count), (x,y+h-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
-        for u in range(table_len):
-            cv2.putText(img, 'Mesa '+ str(u) + ': ' + str(table_occ[u]), (200 * u, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,0), 1)
         cv2.rectangle(img, (x,y), (x+w, y+h), (0,0,255), 2)
         occ[seat.index(rec)] = 1
         if count < 900:
             cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), 2)
             occ[seat.index(rec)] = 0
-            
+
+    for x, y, w, h in tables:
+        rec = (x, y, w, h)
+        zeros = 0
+        for j in table[tables.index(rec)]:
+            if occ[j] == 0:
+                zeros += 1
+        if zeros == len(table[tables.index(rec)]): table_occ[tables.index(rec)] = 'Free'
+        else: table_occ[tables.index(rec)] = 'Full'
+        cv2.putText(img, 'Mesa '+ str(tables.index(rec)) + ': ' + str(table_occ[tables.index(rec)]), (200 * tables.index(rec), 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,0), 1)
+        cv2.putText(img, str(tables.index(rec))+ ', ' + str(occ[tables.index(rec)]) + ', ' + str(count), (x,y+10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
+        cv2.rectangle(img, (x,y), (x+w, y+h), (0,0,255), 2)
+        if table_occ[tables.index(rec)] == 'Free':
+            cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), 2)
 
     cv2.imshow('video', img)
     # cv2.imshow('video TH', imgTH)
