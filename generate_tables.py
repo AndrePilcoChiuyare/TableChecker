@@ -5,7 +5,7 @@ img = cv2.imread('table.png')
 
 tables = []
 
-for x in range(2):
+for x in range(4):
     table = cv2.selectROI('table', img, False)
     cv2.destroyWindow('table')
     tables.append(table)

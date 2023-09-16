@@ -13,7 +13,7 @@ with open('tables.pkl', 'rb') as file:
 video = cv2.VideoCapture('prueba.mp4')
 occ = [1] * len(seat)
 
-table = [(0,1), (2,3,4)]
+table = [(0,1), (2,3), (4,5), (6,7)]
 table_len = len(table)
 table_occ = ['Free'] * table_len
 
