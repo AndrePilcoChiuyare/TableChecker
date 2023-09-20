@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 
 seat = []
+
 with open('seats.pkl', 'rb') as file:
     seat = pickle.load(file)
 
@@ -17,7 +18,7 @@ table = [(0,1), (2,3,4,5), (6,7,8),(9,10,11,13)]
 table_len = len(table)
 table_occ = ['Free'] * table_len
 
-px = 3200
+px = 3600
 while True:
     check, img = video.read()
     imgBN = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -29,8 +30,8 @@ while True:
         rec = (x, y, w, h)
         espacio = imgDil[y:y+h, x:x+w]
         count = cv2.countNonZero(espacio)
-        # cv2.putText(img, str(seat.index(rec))+ ', ' + str(occ[seat.index(rec)]) + ', ' + str(count), (x,y+h-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
-        cv2.putText(img, 'Silla ' + str(seat.index(rec)+1), (x,y+h-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
+        cv2.putText(img, str(seat.index(rec))+ ', ' + str(occ[seat.index(rec)]) + ', ' + str(count), (x,y+h-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
+        #cv2.putText(img, 'Silla ' + str(seat.index(rec)+1), (x,y+h-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
         cv2.rectangle(img, (x,y), (x+w, y+h), (0,0,255), 2)
         occ[seat.index(rec)] = 1
         if count < px:
