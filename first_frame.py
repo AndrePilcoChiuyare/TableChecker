@@ -18,7 +18,7 @@ def get_frame(video_path, frame_number):
 video_path = "prueba.mp4"
 
 # Obtiene el frame 1500
-frame = get_frame(video_path, 1500)
+frame = get_frame(video_path, 9000)
 
 # Muestra el frame
 cv2.imshow("table.jpg", frame)
