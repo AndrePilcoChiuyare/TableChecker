@@ -13,11 +13,11 @@ with open('tables.pkl', 'rb') as file:
 video = cv2.VideoCapture('prueba.mp4')
 occ = [1] * len(seat)
 
-table = [(0,1), (2,3), (4,5), (6,7)]
+table = [(0,1), (2,3,4,5), (6,7,8),(9,10,11,13)]
 table_len = len(table)
 table_occ = ['Free'] * table_len
 
-
+px = 2500
 while True:
     check, img = video.read()
     imgBN = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -32,7 +32,7 @@ while True:
         cv2.putText(img, str(seat.index(rec))+ ', ' + str(occ[seat.index(rec)]) + ', ' + str(count), (x,y+h-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
         cv2.rectangle(img, (x,y), (x+w, y+h), (0,0,255), 2)
         occ[seat.index(rec)] = 1
-        if count < 900:
+        if count < px:
             cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), 2)
             occ[seat.index(rec)] = 0
 
@@ -53,5 +53,5 @@ while True:
     cv2.imshow('video', img)
     # cv2.imshow('video TH', imgTH)
     # cv2.imshow('video Median', imgMedian)
-    # cv2.imshow('video Dilatada', imgDil)
+    cv2.imshow('video Dilatada', imgDil)
     cv2.waitKey(10)

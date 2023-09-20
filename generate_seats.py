@@ -1,7 +1,7 @@
 import cv2
 import pickle
 
-img = cv2.imread('table.png')
+img = cv2.imread('table.jpg')
 
 seats = []
 
