@@ -44,11 +44,16 @@ while True:
         for j in table[tables.index(rec)]:
             if occ[j] == 0:
                 zeros += 1
-        if zeros == len(table[tables.index(rec)]): table_occ[tables.index(rec)] = 'Free'
-        else: table_occ[tables.index(rec)] = 'Full'
-        cv2.putText(img, 'Table '+ str(tables.index(rec)+1) + ': ' + str(table_occ[tables.index(rec)]), (300 * tables.index(rec) + 60, 680), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255,255,255), 3)
+        if zeros == len(table[tables.index(rec)]): 
+            table_occ[tables.index(rec)] = 'Free'
+            cv2.putText(img, 'Table '+ str(tables.index(rec)+1) + ': ' + str(table_occ[tables.index(rec)]), (300 * tables.index(rec) + 60, 680), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,255,0), 3)
+            cv2.putText(img, 'Table ' + str(tables.index(rec)+1), (x,y), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,0), 2)
+        else: 
+            table_occ[tables.index(rec)] = 'Full'
+            cv2.putText(img, 'Table '+ str(tables.index(rec)+1) + ': ' + str(table_occ[tables.index(rec)]), (300 * tables.index(rec) + 60, 680), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,0,255), 3)
+            cv2.putText(img, 'Table ' + str(tables.index(rec)+1), (x,y), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,0,255), 2)
+        
         # cv2.putText(img, str(tables.index(rec))+ ', ' + str(occ[tables.index(rec)]) + ', ' + str(count), (x,y+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
-        cv2.putText(img, 'Table ' + str(tables.index(rec)+1), (x,y), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,0,0), 2)
         # cv2.rectangle(img, (x,y), (x+w, y+h), (0,0,255), 2)
         # if table_occ[tables.index(rec)] == 'Free':
             # cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), 2)
