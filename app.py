@@ -1,11 +1,10 @@
 from tkinter import *
-from tkinter import filedialog
 from PIL import Image
 from PIL import ImageTk
-import imutils
 import cv2
 import pickle
 import numpy as np
+import tkinter as tk
 
 
 seat = []
@@ -28,13 +27,19 @@ px = 3600
 
 def contadoresInterfaz(seatFree, seatOcuppied, tableFree, tableOcuppied, numTablesF, numTablesO):
 
-    seatsFree.config(text = f"Seats Free: {seatFree}")
-    seatsOcuppied.config(text = f"Seats Occupied: {seatOcuppied}")
-    tablesFree.config(text = f"Tables Free: {tableFree} {numTablesF}")
-    tablesOcuppied.config(text = f"Tables Occupied: {tableOcuppied} {numTablesO}")
+    seatsFree.config(text = f"Free seats: {seatFree}")
+    seatsOcuppied.config(text = f"Occupied Seats: {seatOcuppied}")
+    tablesFree.config(text = f"Free tables: {tableFree} {numTablesF}")
+    tablesOcuppied.config(text = f"Occupied tables: {tableOcuppied} {numTablesO}")
     
 
 def reproducir_video():
+    #ajuste contadores
+    btnVisualizar.grid(column=0, row=1, padx=10, pady=5)
+    seatsFree.grid(column=0, row = 0, columnspan=1)
+    seatsOcuppied.grid(column=1, row = 0, columnspan=1)
+    tablesFree.grid(column=2, row = 0, columnspan=1)
+    tablesOcuppied.grid(column=3, row = 0, columnspan=1)
 
     global cap
     check, img = cap.read()
@@ -53,8 +58,6 @@ def reproducir_video():
             rec = (x, y, w, h)
             espacio = imgDil[y:y+h, x:x+w]
             count = cv2.countNonZero(espacio)
-            # cv2.putText(img, str(seat.index(rec))+ ', ' + str(occ[seat.index(rec)]) + ', ' + str(count), (x,y+h-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
-            # cv2.putText(img, 'Seat ' + str(seat.index(rec)+1), (x+10,y+h-10), cv2.FONT_HERSHEY_SIMPLEX, 0.62, (0,0,0), 2)
             cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 2)
             occ[seat.index(rec)] = 1
             if count < px:
@@ -78,19 +81,12 @@ def reproducir_video():
                 tableF = tableF + 1
                 table_occ[tables.index(rec)] = 'Free'
                 strTablesF = strTablesF + str(tables.index(rec)+1) + ' '
-                #cv2.putText(img, 'Table '+ str(tables.index(rec)+1) + ': ' + str(table_occ[tables.index(rec)]), (300 * tables.index(rec) + 60, 680), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,255,0), 3)
                 cv2.putText(img, 'Table ' + str(tables.index(rec)+1), (x,y), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,0), 2)
             else:
                 tableO = tableO + 1 
                 table_occ[tables.index(rec)] = 'Full'
                 strTablesO = strTablesO + str(tables.index(rec)+1) + ' '
-                #cv2.putText(img, 'Table '+ str(tables.index(rec)+1) + ': ' + str(table_occ[tables.index(rec)]), (300 * tables.index(rec) + 60, 680), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255,0,0), 3)
                 cv2.putText(img, 'Table ' + str(tables.index(rec)+1), (x,y), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255,0,0), 2)
-
-            # cv2.putText(img, str(tables.index(rec))+ ', ' + str(occ[tables.index(rec)]) + ', ' + str(count), (x,y+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
-            # cv2.rectangle(img, (x,y), (x+w, y+h), (0,0,255), 2)
-            # if table_occ[tables.index(rec)] == 'Free':
-                # cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), 2)
         
         strTablesF = strTablesF[:-1]
         strTablesO = strTablesO[:-1]
@@ -111,17 +107,16 @@ def reproducir_video():
 cap = cv2.VideoCapture('prueba.mp4')
 
 root = Tk()
-root.title = "Procesamiento de Imagene - Tabajo Parcial"
-#root.attributes('-fullscreen', True)
+root.title = "Procesamiento de Imágenes - Tabajo Parcial"
 
 #Boton para empezar a reproducir el video
-btnVisualizar = Button(root, text="Reproducir video", command=reproducir_video)
-btnVisualizar.grid(column=0, row=1, padx=10, pady=5)
+btnVisualizar = Button(root, text="Play", command=reproducir_video)
+btnVisualizar.grid(column=0, row=0, padx=10, pady=5)
 
 #Texto
 seatsFree = Label(root)
 seatsFree.grid(column=1, row = 0, columnspan=1)
-seatsFree.config(fg='blue',font=("Arial", 18))
+seatsFree.config(fg="chartreuse3",font=("Arial", 18))
 
 seatsOcuppied = Label(root)
 seatsOcuppied.grid(column=2, row = 0, columnspan=1)
@@ -129,7 +124,7 @@ seatsOcuppied.config(fg='red',font=("Arial", 18))
 
 tablesFree = Label(root)
 tablesFree.grid(column=3, row = 0, columnspan=1)
-tablesFree.config(fg='blue',font=("Arial", 18))
+tablesFree.config(fg='chartreuse3',font=("Arial", 18))
 
 tablesOcuppied = Label(root)
 tablesOcuppied.grid(column=4, row = 0, columnspan=1)
